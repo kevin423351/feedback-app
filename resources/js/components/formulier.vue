@@ -1,6 +1,7 @@
 <template>
     <div> 
       <h1>buttons</h1>
+      <v-color-picker>hi</v-color-picker>
       <!-- <form @submit.prevent="submitForm" v-if="!formSubmitted">
         <span>hoe schoon was de wc</span><br>
         <input 
