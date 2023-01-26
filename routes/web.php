@@ -19,3 +19,5 @@ use App\Http\Controllers\SendFeedbackController;
 Route::get('/', [SendFeedbackController::class, 'viewForm']);
 
 Route::post('/send', [SendFeedbackController::class, 'insert']);
+
+Route::get('/get', [SendFeedbackController::class, 'getData']);

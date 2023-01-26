@@ -1,7 +1,6 @@
 <template>
     <div> 
       <h1>buttons</h1>
-      <v-color-picker>hi</v-color-picker>
       <!-- <form @submit.prevent="submitForm" v-if="!formSubmitted">
         <span>hoe schoon was de wc</span><br>
         <input 
@@ -25,6 +24,48 @@
             <img :src="post.path" v-on:click="submitForm(post.id)" />
           </div>
         </div>
+        
+            <v-snackbar
+              v-model="snackbar"
+              :timeout="timeout"
+              :color= "color"
+            >
+
+              {{ text }}
+
+              <template v-slot:action="{ attrs }">
+                <v-btn
+                  color="green"
+                  text
+                  v-bind="attrs"
+                  @click="snackbar = false"
+                >
+                  Close
+                </v-btn>
+              </template>
+            </v-snackbar>
+
+        <v-table>
+          <thead>
+            <tr>
+              <th class="text-left">
+                button
+              </th>
+              <th class="text-left">
+                ingedrukt
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="item in countedFeedback"
+              :key="item.name"
+            >
+              <td>{{ item.buttonID }}</td>
+              <td>{{ item.Presses }}</td>
+            </tr>
+          </tbody>
+        </v-table>
         <!-- <input 
           class="submit" 
           type="submit" 
@@ -58,7 +99,16 @@
           vraag1: "",
           vraag2: "",
           formSubmitted: false,
+          countedFeedback: [],
+          snackbar: false,
+          text: "",
+          timeout: 5000,
+          color: "",
+          error: "",
         };
+      },
+      mounted() {
+          this.getFeedback();
       },
       methods: {
         submitForm: function (id) {
@@ -70,22 +120,25 @@
           id: id,
           }
         }).then( async (response) => {
-          alert(response.data)
-        }).catch()
+          this.color = "green"
+          this.text = response.data
+          this.snackbar = true 
+          this.getFeedback()
+        }).catch(error)
+          this.text = "het is fout gegaan"
+          this.color = "red"
+          this.snackbar = true 
         },
   
-        // review: function (id) {
-        // axios({
-        // method: 'get',
-        // url: '/send',
-        // data: {
-        //   id: id,
-        //   }
-        // }).then( async (response) => {
-        //   alert(response.data)
-        // }).catch()
-        // },
-        } 
+        getFeedback: function () {
+        axios({
+        method: 'get',
+        url: '/get',
+        }).then( async (response) => {
+          this.countedFeedback = response.data;
+        }).catch()
+        },
+        }  
     };
   </script>
   
